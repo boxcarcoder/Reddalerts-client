@@ -9,52 +9,57 @@ import {
 } from './types';
 import axios from 'axios';
 
-export const submitSubredditInfo = ({
-  id,
-  subredditName,
-  subredditKeywords,
-}) => async (dispatch) => {
-  try {
-    // configuration of the HTTP request to the backend
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const body = JSON.stringify({
-      id,
-      subredditName,
-      subredditKeywords,
-    });
-
-    const res = await axios.post('/api/submitSubredditInfo', body, config);
-
-    if (res.data.update === 'true') {
-      dispatch({
-        type: UPDATE_SUBREDDIT_KEYWORDS,
-        payload: res.data,
+export const submitSubredditInfo =
+  ({ id, subredditName, subredditKeywords }) =>
+  async (dispatch) => {
+    try {
+      // configuration of the HTTP request to the backend
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const body = JSON.stringify({
+        id,
+        subredditName,
+        subredditKeywords,
       });
-    } else {
+
+      const res = await axios.post(
+        'https://api.reddalerts.com/api/submitSubredditInfo',
+        body,
+        config
+      );
+
+      if (res.data.update === 'true') {
+        dispatch({
+          type: UPDATE_SUBREDDIT_KEYWORDS,
+          payload: res.data,
+        });
+      } else {
+        dispatch({
+          type: SUBMIT_SUBREDDIT_INFO,
+          payload: res.data,
+        });
+      }
+    } catch (err) {
       dispatch({
-        type: SUBMIT_SUBREDDIT_INFO,
-        payload: res.data,
+        type: SUBMIT_SUBREDDIT_INFO_FAIL,
+        payload: { msg: err },
       });
     }
-  } catch (err) {
-    dispatch({
-      type: SUBMIT_SUBREDDIT_INFO_FAIL,
-      payload: { msg: err },
-    });
-  }
-};
+  };
 
 export const fetchUserSubreddits = (id) => async (dispatch) => {
   try {
-    const res = await axios.get('/api/fetchSubredditsInfo', {
-      params: {
-        id,
-      },
-    });
+    const res = await axios.get(
+      'https://api.reddalerts.com/api/fetchSubredditsInfo',
+      {
+        params: {
+          id,
+        },
+      }
+    );
 
     dispatch({
       type: FETCH_SUBREDDITS,
@@ -68,22 +73,22 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
   }
 };
 
-export const deleteMonitoredSubreddit = (id, subredditName) => async (
-  dispatch
-) => {
-  try {
-    const res = await axios.delete('/api/deleteMonitoredSubreddit', {
-      params: {
-        id,
-        subredditName,
-      },
-    });
+export const deleteMonitoredSubreddit =
+  (id, subredditName) => async (dispatch) => {
+    try {
+      const res = await axios.delete(
+        'https://api.reddalerts.com/api/deleteMonitoredSubreddit',
+        {
+          params: {
+            id,
+            subredditName,
+          },
+        }
+      );
 
-    dispatch({
-      type: DELETE_SUBREDDIT,
-      payload: res.data,
-    });
-  } catch (err) {
-    console.log('shit: ', err);
-  }
-};
+      dispatch({
+        type: DELETE_SUBREDDIT,
+        payload: res.data,
+      });
+    } catch (err) {}
+  };
