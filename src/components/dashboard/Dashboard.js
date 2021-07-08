@@ -31,6 +31,10 @@ const Dashboard = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     submitSubredditInfo({ id, subredditName, subredditKeywords });
+    setFormData({
+      subredditName: '',
+      subredditKeywords: '',
+    });
   };
 
   const handleSubredditName = (e) => {
