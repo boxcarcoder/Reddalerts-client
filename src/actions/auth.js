@@ -24,11 +24,7 @@ export const login =
       const body = JSON.stringify({ email, password });
 
       // Store the logged in user's token into a redux state for authentication purposes.
-      const res = await axios.post(
-        'https://api.reddalerts.com/api/login',
-        body,
-        config
-      );
+      const res = await axios.post('/api/login', body, config);
       // const res = await axios.post('/api/login', body, config);
 
       dispatch({
@@ -57,11 +53,7 @@ export const register =
       const body = JSON.stringify({ username, email, password });
 
       // Store the logged in user's token into a redux state for authentication purposes.
-      const res = await axios.post(
-        'https://api.reddalerts.com/api/register',
-        body,
-        config
-      );
+      const res = await axios.post('/api/register', body, config);
       // const res = await axios.post('/api/register', body, config);
 
       dispatch({
@@ -97,7 +89,7 @@ export const logout = () => async (dispatch) => {
 //       });
 
 //       const res = await axios.post(
-//         'https://api.reddalerts.com/api/submitPhoneNumber',
+//         '/api/submitPhoneNumber',
 //         body,
 //         config
 //       );
@@ -112,7 +104,7 @@ export const logout = () => async (dispatch) => {
 // export const deletePhoneNumber = (id) => async (dispatch) => {
 //   try {
 //     const res = await axios.delete(
-//       'https://api.reddalerts.com/api/deletePhoneNumber',
+//       '/api/deletePhoneNumber',
 //       {
 //         params: {
 //           id,

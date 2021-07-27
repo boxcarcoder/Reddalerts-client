@@ -25,21 +25,35 @@ export const submitSubredditInfo =
         subredditKeywords,
       });
 
-      const res = await axios.post(
-        'https://api.reddalerts.com/api/submitSubredditInfo',
-        body,
-        config
-      );
+      const res = await axios.post('/api/submitSubredditInfo', body, config);
 
+      // Fetch the keywords from all Monitor objects from the backend
+      // that correspond to the logged in user and designated subreddit.
+      let monitored_keywords = [];
+      for (let i = 0; i < res.data.monitors.length; i++) {
+        monitored_keywords.push(res.data.monitors[i].keyword.keyword);
+      }
+
+      // Create a JSON object to send as a payload to the reducer.
+      let newResData = {};
+
+      // Create a JSON object that contains subreddit name and corresponding keywords.
+      let subredditInfo = {};
+      subredditInfo['subreddit_name'] =
+        res.data.monitors[0].subreddit.subreddit_name;
+      subredditInfo['keywords'] = monitored_keywords;
+      newResData['subreddit'] = subredditInfo;
+
+      // Either update existing data or submit new data.
       if (res.data.update === 'true') {
         dispatch({
           type: UPDATE_SUBREDDIT_KEYWORDS,
-          payload: res.data,
+          payload: newResData,
         });
       } else {
         dispatch({
           type: SUBMIT_SUBREDDIT_INFO,
-          payload: res.data,
+          payload: newResData,
         });
       }
     } catch (err) {
@@ -52,14 +66,11 @@ export const submitSubredditInfo =
 
 export const fetchUserSubreddits = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(
-      'https://api.reddalerts.com/api/fetchSubredditsInfo',
-      {
-        params: {
-          id,
-        },
-      }
-    );
+    const res = await axios.get('/api/fetchSubredditsInfo', {
+      params: {
+        id,
+      },
+    });
 
     dispatch({
       type: FETCH_SUBREDDITS,
@@ -76,15 +87,12 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
 export const deleteMonitoredSubreddit =
   (id, subredditName) => async (dispatch) => {
     try {
-      const res = await axios.delete(
-        'https://api.reddalerts.com/api/deleteMonitoredSubreddit',
-        {
-          params: {
-            id,
-            subredditName,
-          },
-        }
-      );
+      const res = await axios.delete('/api/deleteMonitoredSubreddit', {
+        params: {
+          id,
+          subredditName,
+        },
+      });
 
       dispatch({
         type: DELETE_SUBREDDIT,

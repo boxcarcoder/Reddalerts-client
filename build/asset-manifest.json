@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.2f4a2dea.chunk.css",
-    "main.js": "/static/js/main.ef9a8261.chunk.js",
-    "main.js.map": "/static/js/main.ef9a8261.chunk.js.map",
+    "main.css": "/static/css/main.30462f34.chunk.css",
+    "main.js": "/static/js/main.f4949428.chunk.js",
+    "main.js.map": "/static/js/main.f4949428.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.120840cb.js",
     "runtime-main.js.map": "/static/js/runtime-main.120840cb.js.map",
     "static/js/2.4a3cc50b.chunk.js": "/static/js/2.4a3cc50b.chunk.js",
     "static/js/2.4a3cc50b.chunk.js.map": "/static/js/2.4a3cc50b.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.2f4a2dea.chunk.css.map": "/static/css/main.2f4a2dea.chunk.css.map",
+    "static/css/main.30462f34.chunk.css.map": "/static/css/main.30462f34.chunk.css.map",
     "static/js/2.4a3cc50b.chunk.js.LICENSE.txt": "/static/js/2.4a3cc50b.chunk.js.LICENSE.txt",
     "static/media/App.css": "/static/media/Girl-hand-laptop-working.476c50fd.jpeg",
     "static/media/top-design-subreddits.b78100bd.jpeg": "/static/media/top-design-subreddits.b78100bd.jpeg"
@@ -16,7 +16,7 @@
   "entrypoints": [
     "static/js/runtime-main.120840cb.js",
     "static/js/2.4a3cc50b.chunk.js",
-    "static/css/main.2f4a2dea.chunk.css",
-    "static/js/main.ef9a8261.chunk.js"
+    "static/css/main.30462f34.chunk.css",
+    "static/js/main.f4949428.chunk.js"
   ]
 }

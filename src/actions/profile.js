@@ -16,11 +16,7 @@ export const submitPhoneNumber =
         phoneNumber,
       });
 
-      const res = await axios.post(
-        'https://api.reddalerts.com/api/submitPhoneNumber',
-        body,
-        config
-      );
+      const res = await axios.post('/api/submitPhoneNumber', body, config);
 
       dispatch({
         type: SUBMIT_PHONE_NUMBER,
@@ -31,14 +27,11 @@ export const submitPhoneNumber =
 
 export const deletePhoneNumber = (id) => async (dispatch) => {
   try {
-    const res = await axios.delete(
-      'https://api.reddalerts.com/api/deletePhoneNumber',
-      {
-        params: {
-          id,
-        },
-      }
-    );
+    const res = await axios.delete('/api/deletePhoneNumber', {
+      params: {
+        id,
+      },
+    });
 
     dispatch({
       type: DELETE_PHONE_NUMBER,

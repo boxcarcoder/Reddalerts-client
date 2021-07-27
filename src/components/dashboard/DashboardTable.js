@@ -15,9 +15,9 @@ const DashboardTable = ({
   };
 
   const displayKeywords = (keywords) => {
-    return keywords.map((keywordObj) => (
+    return keywords.map((keyword) => (
       <tr>
-        <td>{keywordObj.keyword}</td>
+        <td>{keyword}</td>
       </tr>
     ));
   };
