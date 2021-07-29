@@ -26,22 +26,22 @@ export const submitSubredditInfo =
       });
 
       const res = await axios.post('/api/submitSubredditInfo', body, config);
-
-      // Create a JSON object to send as a payload to the reducer.
-      let newResData = {};
+      let monitors = res.data.monitors;
 
       // Fetch the keywords from all Monitor objects from the backend
       // that correspond to the logged in user and designated subreddit.
       let monitored_keywords = [];
-      for (let i = 0; i < res.data.monitors.length; i++) {
-        monitored_keywords.push(res.data.monitors[i].keyword.keyword);
+      for (let i = 0; i < monitors.length; i++) {
+        monitored_keywords.push(monitors[i].keyword.keyword);
       }
 
-      // Create a JSON object that contains subreddit name and corresponding keywords.
+      // Create a JSON object that contains the submitted subreddit name and corresponding keywords.
       let subredditJSON = {};
-      subredditJSON['subreddit_name'] =
-        res.data.monitors[0].subreddit.subreddit_name;
+      subredditJSON['subreddit_name'] = monitors[0].subreddit.subreddit_name;
       subredditJSON['keywords'] = monitored_keywords;
+
+      // Create a JSON object to send as a payload to the reducer.
+      let newResData = {};
       newResData['subreddit'] = subredditJSON;
 
       // Either update existing data or submit new data.
@@ -72,22 +72,19 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
       },
     });
 
-    console.log('res.data: ', res.data);
+    let monitors = res.data.monitors;
 
-    // Create a JSON object to send as a payload to the reducer.
-    let newResData = {};
-
-    // Fetch the subreddits and keywords from all Monitor objects that correspond to the logged in user.
-    let monitored_subreddits = [];
+    // Aggregate all keywords and their subreddit into subreddit JSON objects.
+    let monitored_subreddits = []; // An array of JSON objects, each representing a Subreddit and its corresponding Keywords.
     let prev_subreddit_name;
     let curr_subreddit_name;
     let curr_keyword;
     let monitored_subreddit_idx = -1;
     let curr_monitored_subreddit;
 
-    for (let i = 0; i < res.data.monitors.length; i++) {
-      curr_subreddit_name = res.data.monitors[i].subreddit.subreddit_name;
-      curr_keyword = res.data.monitors[i].keyword.keyword;
+    for (let i = 0; i < monitors.length; i++) {
+      curr_subreddit_name = monitors[i].subreddit.subreddit_name;
+      curr_keyword = monitors[i].keyword.keyword;
       let subredditJSON = {};
 
       if (prev_subreddit_name !== curr_subreddit_name) {
@@ -110,9 +107,9 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
       prev_subreddit_name = curr_subreddit_name;
     }
 
+    // Create a JSON object to send as a payload to the reducer.
+    let newResData = {};
     newResData['subreddits'] = monitored_subreddits;
-
-    // Add keywords to each of these subreddits.
 
     dispatch({
       type: FETCH_SUBREDDITS,
@@ -136,9 +133,48 @@ export const deleteMonitoredSubreddit =
         },
       });
 
+      let monitors = res.data.monitors;
+
+      // Aggregate all keywords and their subreddit into subreddit JSON objects.
+      let monitored_subreddits = []; // An array of JSON objects, each representing a Subreddit and its corresponding Keywords.
+      let prev_subreddit_name;
+      let curr_subreddit_name;
+      let curr_keyword;
+      let monitored_subreddit_idx = -1;
+      let curr_monitored_subreddit;
+
+      for (let i = 0; i < monitors.length; i++) {
+        curr_subreddit_name = monitors[i].subreddit.subreddit_name;
+        curr_keyword = res.data.monitors[i].keyword.keyword;
+        let subredditJSON = {};
+
+        if (prev_subreddit_name !== curr_subreddit_name) {
+          // Create a new entry with the current subreddit and current keyword.
+          subredditJSON['subreddit_name'] = curr_subreddit_name;
+          subredditJSON['keywords'] = curr_keyword;
+          monitored_subreddits.push(subredditJSON);
+
+          monitored_subreddit_idx++;
+        } else if (prev_subreddit_name === curr_subreddit_name) {
+          // Update the current monitored subreddit with the current keyword.
+          curr_monitored_subreddit =
+            monitored_subreddits[monitored_subreddit_idx];
+
+          curr_monitored_subreddit['keywords'] = [
+            ...curr_monitored_subreddit['keywords'],
+            curr_keyword,
+          ];
+        }
+        prev_subreddit_name = curr_subreddit_name;
+      }
+
+      // Create a JSON object to send as a payload to the reducer.
+      let newResData = {};
+      newResData['subreddits'] = monitored_subreddits;
+
       dispatch({
         type: DELETE_SUBREDDIT,
-        payload: res.data,
+        payload: newResData,
       });
     } catch (err) {}
   };
