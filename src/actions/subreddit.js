@@ -75,37 +75,7 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
     let monitors = res.data.monitors;
 
     // Aggregate all keywords and their subreddit into subreddit JSON objects.
-    let monitored_subreddits = []; // An array of JSON objects, each representing a Subreddit and its corresponding Keywords.
-    let prev_subreddit_name;
-    let curr_subreddit_name;
-    let curr_keyword;
-    let monitored_subreddit_idx = -1;
-    let curr_monitored_subreddit;
-
-    for (let i = 0; i < monitors.length; i++) {
-      curr_subreddit_name = monitors[i].subreddit.subreddit_name;
-      curr_keyword = monitors[i].keyword.keyword;
-      let subredditJSON = {};
-
-      if (prev_subreddit_name !== curr_subreddit_name) {
-        // Create a new entry with the current subreddit and current keyword.
-        subredditJSON['subreddit_name'] = curr_subreddit_name;
-        subredditJSON['keywords'] = curr_keyword;
-        monitored_subreddits.push(subredditJSON);
-
-        monitored_subreddit_idx++;
-      } else if (prev_subreddit_name === curr_subreddit_name) {
-        // Update the current monitored subreddit with the current keyword.
-        curr_monitored_subreddit =
-          monitored_subreddits[monitored_subreddit_idx];
-
-        curr_monitored_subreddit['keywords'] = [
-          ...curr_monitored_subreddit['keywords'],
-          curr_keyword,
-        ];
-      }
-      prev_subreddit_name = curr_subreddit_name;
-    }
+    let monitored_subreddits = aggregate_subreddits_keywords(monitors);
 
     // Create a JSON object to send as a payload to the reducer.
     let newResData = {};
@@ -136,37 +106,7 @@ export const deleteMonitoredSubreddit =
       let monitors = res.data.monitors;
 
       // Aggregate all keywords and their subreddit into subreddit JSON objects.
-      let monitored_subreddits = []; // An array of JSON objects, each representing a Subreddit and its corresponding Keywords.
-      let prev_subreddit_name;
-      let curr_subreddit_name;
-      let curr_keyword;
-      let monitored_subreddit_idx = -1;
-      let curr_monitored_subreddit;
-
-      for (let i = 0; i < monitors.length; i++) {
-        curr_subreddit_name = monitors[i].subreddit.subreddit_name;
-        curr_keyword = res.data.monitors[i].keyword.keyword;
-        let subredditJSON = {};
-
-        if (prev_subreddit_name !== curr_subreddit_name) {
-          // Create a new entry with the current subreddit and current keyword.
-          subredditJSON['subreddit_name'] = curr_subreddit_name;
-          subredditJSON['keywords'] = curr_keyword;
-          monitored_subreddits.push(subredditJSON);
-
-          monitored_subreddit_idx++;
-        } else if (prev_subreddit_name === curr_subreddit_name) {
-          // Update the current monitored subreddit with the current keyword.
-          curr_monitored_subreddit =
-            monitored_subreddits[monitored_subreddit_idx];
-
-          curr_monitored_subreddit['keywords'] = [
-            ...curr_monitored_subreddit['keywords'],
-            curr_keyword,
-          ];
-        }
-        prev_subreddit_name = curr_subreddit_name;
-      }
+      let monitored_subreddits = aggregate_subreddits_keywords(monitors);
 
       // Create a JSON object to send as a payload to the reducer.
       let newResData = {};
@@ -176,5 +116,46 @@ export const deleteMonitoredSubreddit =
         type: DELETE_SUBREDDIT,
         payload: newResData,
       });
-    } catch (err) {}
+    } catch (err) {
+      dispatch({
+        type: DELETE_SUBREDDIT_FAIL,
+        payload: { msg: err },
+      });
+    }
   };
+
+// Helper function
+function aggregate_subreddits_keywords(monitors) {
+  let monitored_subreddits = []; // An array of JSON objects, each representing a Subreddit and its corresponding Keywords.
+  let prev_subreddit_name;
+  let curr_subreddit_name;
+  let curr_keyword;
+  let monitored_subreddit_idx = -1;
+  let curr_monitored_subreddit;
+
+  for (let i = 0; i < monitors.length; i++) {
+    curr_subreddit_name = monitors[i].subreddit.subreddit_name;
+    curr_keyword = monitors[i].keyword.keyword;
+    let subredditJSON = {};
+
+    if (prev_subreddit_name !== curr_subreddit_name) {
+      // Create a new entry with the current subreddit and current keyword.
+      subredditJSON['subreddit_name'] = curr_subreddit_name;
+      subredditJSON['keywords'] = curr_keyword;
+      monitored_subreddits.push(subredditJSON);
+
+      monitored_subreddit_idx++;
+    } else if (prev_subreddit_name === curr_subreddit_name) {
+      // Update the current monitored subreddit with the current keyword.
+      curr_monitored_subreddit = monitored_subreddits[monitored_subreddit_idx];
+
+      curr_monitored_subreddit['keywords'] = [
+        ...curr_monitored_subreddit['keywords'],
+        curr_keyword,
+      ];
+    }
+    prev_subreddit_name = curr_subreddit_name;
+  }
+
+  return monitored_subreddits;
+}
