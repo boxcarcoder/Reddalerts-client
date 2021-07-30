@@ -6,6 +6,7 @@ import {
   DELETE_SUBREDDIT,
   DELETE_SUBREDDIT_FAIL,
   UPDATE_SUBREDDIT_KEYWORDS,
+  CLEAR_CURRENT_SUBREDDIT,
 } from './types';
 import axios from 'axios';
 
@@ -47,9 +48,19 @@ export const submitSubredditInfo =
       // Either update existing data or submit new data.
       if (res.data.update === 'true') {
         dispatch({
-          type: UPDATE_SUBREDDIT_KEYWORDS,
+          type: CLEAR_CURRENT_SUBREDDIT,
           payload: newResData,
         });
+
+        dispatch({
+          type: SUBMIT_SUBREDDIT_INFO,
+          payload: newResData,
+        });
+
+        // dispatch({
+        //   type: UPDATE_SUBREDDIT_KEYWORDS,
+        //   payload: newResData,
+        // });
       } else {
         dispatch({
           type: SUBMIT_SUBREDDIT_INFO,
@@ -66,6 +77,8 @@ export const submitSubredditInfo =
 
 export const fetchUserSubreddits = (id) => async (dispatch) => {
   try {
+    // let { subredditsState } = getState().subreddit;
+
     const res = await axios.get('/api/fetchSubredditsInfo', {
       params: {
         id,
@@ -80,6 +93,10 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
     // Create a JSON object to send as a payload to the reducer.
     let newResData = {};
     newResData['subreddits'] = monitored_subreddits;
+
+    dispatch({
+      type: CLEAR_CURRENT_SUBREDDIT,
+    });
 
     dispatch({
       type: FETCH_SUBREDDITS,

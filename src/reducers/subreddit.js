@@ -7,10 +7,11 @@ import {
   DELETE_SUBREDDIT,
   DELETE_SUBREDDIT_FAIL,
   UPDATE_SUBREDDIT_KEYWORDS,
+  CLEAR_CURRENT_SUBREDDIT,
 } from '../actions/types';
 
 const initialState = {
-  subreddits: [],
+  subreddits: [], // change this into a object?
   loading: false,
   error: {},
 };
@@ -61,7 +62,22 @@ export default function (state = initialState, action) {
         ...state,
         error: payload,
       };
+    case CLEAR_CURRENT_SUBREDDIT:
+      return {
+        ...state,
+        subreddits: clearCurrentSubreddit(state.subreddits, payload.subreddit), // I should only clear the element that corresponds to the designated subreddit.
+      };
     default:
       return state;
   }
+}
+
+function clearCurrentSubreddit(subreddits, currSubreddit) {
+  let currSubredditName = currSubreddit.subreddit_name;
+  for (let i = 0; i < subreddits.length; i++) {
+    if (subreddits[i].subreddit_name === currSubredditName) {
+      subreddits.splice(i, 1);
+    }
+  }
+  return subreddits;
 }

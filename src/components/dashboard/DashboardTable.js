@@ -15,11 +15,13 @@ const DashboardTable = ({
   };
 
   const displayKeywords = (keywords) => {
-    return keywords.map((keyword) => (
-      <tr>
-        <td>{keyword}</td>
-      </tr>
-    ));
+    if (keywords !== undefined) {
+      return keywords.map((keyword) => (
+        <tr>
+          <td>{keyword}</td>
+        </tr>
+      ));
+    }
   };
 
   return (
