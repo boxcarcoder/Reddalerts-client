@@ -5,8 +5,7 @@ import {
   FETCH_SUBREDDITS_FAIL,
   DELETE_SUBREDDIT,
   DELETE_SUBREDDIT_FAIL,
-  UPDATE_SUBREDDIT_KEYWORDS,
-  CLEAR_CURRENT_SUBREDDIT,
+  REMOVE_CURRENT_SUBREDDIT,
 } from './types';
 import axios from 'axios';
 
@@ -48,7 +47,7 @@ export const submitSubredditInfo =
       // Either update existing data or submit new data.
       if (res.data.update === 'true') {
         dispatch({
-          type: CLEAR_CURRENT_SUBREDDIT,
+          type: REMOVE_CURRENT_SUBREDDIT, // by removing the current subreddit object, we can add a new one (with extra keywords) to replace it.
           payload: newResData,
         });
 
@@ -56,11 +55,6 @@ export const submitSubredditInfo =
           type: SUBMIT_SUBREDDIT_INFO,
           payload: newResData,
         });
-
-        // dispatch({
-        //   type: UPDATE_SUBREDDIT_KEYWORDS,
-        //   payload: newResData,
-        // });
       } else {
         dispatch({
           type: SUBMIT_SUBREDDIT_INFO,
@@ -77,8 +71,6 @@ export const submitSubredditInfo =
 
 export const fetchUserSubreddits = (id) => async (dispatch) => {
   try {
-    // let { subredditsState } = getState().subreddit;
-
     const res = await axios.get('/api/fetchSubredditsInfo', {
       params: {
         id,
@@ -94,9 +86,7 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
     let newResData = {};
     newResData['subreddits'] = monitored_subreddits;
 
-    dispatch({
-      type: CLEAR_CURRENT_SUBREDDIT,
-    });
+    console.log('monitored_subreddits: ', monitored_subreddits);
 
     dispatch({
       type: FETCH_SUBREDDITS,
@@ -158,18 +148,14 @@ function aggregate_subreddits_keywords(monitors) {
     if (prev_subreddit_name !== curr_subreddit_name) {
       // Create a new entry with the current subreddit and current keyword.
       subredditJSON['subreddit_name'] = curr_subreddit_name;
-      subredditJSON['keywords'] = curr_keyword;
+      subredditJSON['keywords'] = [curr_keyword];
       monitored_subreddits.push(subredditJSON);
 
       monitored_subreddit_idx++;
     } else if (prev_subreddit_name === curr_subreddit_name) {
       // Update the current monitored subreddit with the current keyword.
       curr_monitored_subreddit = monitored_subreddits[monitored_subreddit_idx];
-
-      curr_monitored_subreddit['keywords'] = [
-        ...curr_monitored_subreddit['keywords'],
-        curr_keyword,
-      ];
+      curr_monitored_subreddit['keywords'].push(curr_keyword);
     }
     prev_subreddit_name = curr_subreddit_name;
   }

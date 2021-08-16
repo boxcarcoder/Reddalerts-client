@@ -16,6 +16,7 @@ const DashboardTable = ({
 
   const displayKeywords = (keywords) => {
     if (keywords !== undefined) {
+      console.log('keywords: ', keywords);
       return keywords.map((keyword) => (
         <tr>
           <td>{keyword}</td>
