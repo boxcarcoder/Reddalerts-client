@@ -3,9 +3,17 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-const Navbar = ({ authState: { isAuthenticated }, logout }) => {
+const Navbar = ({ authState: { isAuthenticated, loggedInUser }, logout }) => {
   const handleLogout = (e) => {
     logout();
+  };
+
+  const displayLinkToSubreddits = () => {
+    if (!loggedInUser.phone_num) {
+      return <span>Subreddits</span>;
+    } else {
+      return <Link to='/dashboard'>Subreddits</Link>;
+    }
   };
 
   return (
@@ -13,7 +21,7 @@ const Navbar = ({ authState: { isAuthenticated }, logout }) => {
       {isAuthenticated ? (
         <div className='navbar'>
           <Fragment>
-            <Link to='/dashboard'>Subreddits</Link>
+            {displayLinkToSubreddits()}
             <Link to='/settings'>Settings</Link>
             <a onClick={(e) => handleLogout(e)} href='/register'>
               Logout

@@ -92,6 +92,16 @@ input[type='submit'] {
   background-color: transparent;
 }
 
+.alert {
+  padding: 0.3rem;
+  margin: 1rem 2rem;
+  opacity: 0.9;
+  background-color: crimson;
+  color: rgb(26, 25, 25);
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
 /* navbar styles */
 .navbar {
   text-align: right;
@@ -251,14 +261,4 @@ input[type='submit'] {
 
 .phoneNumDeleteBtn {
   margin: 0px 10px;
-}
-
-.alert {
-  padding: 0.3rem;
-  margin: 1rem 0rem;
-  opacity: 0.9;
-  background-color: crimson;
-  color: rgb(26, 25, 25);
-  font-size: 1.25rem;
-  font-weight: bold;
 }

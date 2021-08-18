@@ -12,7 +12,7 @@ const Dashboard = ({
   fetchUserSubreddits,
   subredditState: { subreddits, error },
   authState: {
-    loggedInUser: { id },
+    loggedInUser: { id, phone_num },
     isAuthenticated,
   },
 }) => {
@@ -59,6 +59,10 @@ const Dashboard = ({
 
   if (!isAuthenticated) {
     return <Redirect to='/register' />;
+  }
+
+  if (!phone_num) {
+    return <Redirect to='/settings' />;
   }
 
   return (

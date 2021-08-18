@@ -56,9 +56,16 @@ const Settings = ({
     }
   };
 
+  const displayPhoneNumberWarning = () => {
+    if (!phone_num) {
+      return <div className='alert'>Please enter your phone number.</div>;
+    }
+  };
+
   return (
     <Fragment>
       <h1 className='defaultHeader'>ReddAlerts</h1>
+      {displayPhoneNumberWarning()}
       <div className='sectionBox'>
         <h2>Settings</h2>
         <div className='line' />
