@@ -1,14 +1,13 @@
 import React, { Fragment, useState } from 'react';
-import { submitPhoneNumber, deletePhoneNumber } from '../../actions/profile';
+import { submitPhoneNumber, deletePhoneNumber } from '../../actions/auth';
 import { connect } from 'react-redux';
 
 const Settings = ({
   submitPhoneNumber,
   deletePhoneNumber,
   authState: {
-    loggedInUser: { id },
+    loggedInUser: { id, phone_num },
   },
-  profileState: { profilePhoneNumber },
 }) => {
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -34,11 +33,11 @@ const Settings = ({
   };
 
   const displayCurrentPhoneNum = () => {
-    if (profilePhoneNumber) {
+    if (phone_num) {
       return (
         <Fragment>
           <div className='phoneNumAndDeleteBtn'>
-            <h4>My Phone Number: {profilePhoneNumber}</h4>
+            <h4>My Phone Number: {phone_num}</h4>
             <button
               className='phoneNumDeleteBtn'
               onClick={(e) => handleDelete(e)}
@@ -82,7 +81,6 @@ const Settings = ({
 
 const mapStateToProps = (state) => ({
   authState: state.auth,
-  profileState: state.profile,
 });
 
 export default connect(mapStateToProps, {

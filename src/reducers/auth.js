@@ -5,8 +5,9 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGOUT,
-  // SUBMIT_PHONE_NUMBER,
-  // DELETE_PHONE_NUMBER,
+  SUBMIT_PHONE_NUMBER,
+  SUBMIT_PHONE_NUMBER_FAIL,
+  DELETE_PHONE_NUMBER,
 } from '../actions/types';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   loggedInUser: null,
   loading: false,
   isAuthenticated: false,
+  error: {},
 };
 
 export default function (state = initialState, action) {
@@ -36,16 +38,21 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loggedInUser: null,
       };
-    // case SUBMIT_PHONE_NUMBER:
-    //   return {
-    //     ...state,
-    //     loggedInUser: payload,
-    //   };
-    // case DELETE_PHONE_NUMBER:
-    //   return {
-    //     ...state,
-    //     loggedInUser: payload,
-    //   };
+    case SUBMIT_PHONE_NUMBER:
+      return {
+        ...state,
+        loggedInUser: payload,
+      };
+    case SUBMIT_PHONE_NUMBER_FAIL:
+      return {
+        ...state,
+        error: payload,
+      };
+    case DELETE_PHONE_NUMBER:
+      return {
+        ...state,
+        loggedInUser: payload,
+      };
     default:
       return state;
   }
