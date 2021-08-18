@@ -8,6 +8,7 @@ import {
   REMOVE_CURRENT_SUBREDDIT,
 } from './types';
 import axios from 'axios';
+import { setAlert } from './alert';
 
 export const submitSubredditInfo =
   ({ id, subredditName, subredditKeywords }) =>
@@ -66,6 +67,8 @@ export const submitSubredditInfo =
         type: SUBMIT_SUBREDDIT_INFO_FAIL,
         payload: { msg: err },
       });
+
+      dispatch(setAlert('This Subreddit does not exist'));
     }
   };
 
@@ -85,8 +88,6 @@ export const fetchUserSubreddits = (id) => async (dispatch) => {
     // Create a JSON object to send as a payload to the reducer.
     let newResData = {};
     newResData['subreddits'] = monitored_subreddits;
-
-    console.log('monitored_subreddits: ', monitored_subreddits);
 
     dispatch({
       type: FETCH_SUBREDDITS,

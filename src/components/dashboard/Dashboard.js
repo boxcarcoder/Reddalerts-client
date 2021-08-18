@@ -10,7 +10,7 @@ import DashboardTable from './DashboardTable';
 const Dashboard = ({
   submitSubredditInfo,
   fetchUserSubreddits,
-  subredditState: { subreddits },
+  subredditState: { subreddits, error },
   authState: {
     loggedInUser: { id },
     isAuthenticated,

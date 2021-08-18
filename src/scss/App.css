@@ -252,3 +252,13 @@ input[type='submit'] {
 .phoneNumDeleteBtn {
   margin: 0px 10px;
 }
+
+.alert {
+  padding: 0.3rem;
+  margin: 1rem 0rem;
+  opacity: 0.9;
+  background-color: crimson;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: bold;
+}

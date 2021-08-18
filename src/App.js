@@ -13,6 +13,7 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import Navbar from './components/layout/Navbar';
 import Settings from './components/profile/Settings';
+import Alert from './components/layout/Alert';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Fragment>
           <Navbar />
           <Route exact path='/' component={Landing} />
+          <Alert />
           <Switch>
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
