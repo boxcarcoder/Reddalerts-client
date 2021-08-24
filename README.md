@@ -6,6 +6,8 @@ An application for users to monitor their favorite Subreddits from the website, 
 
 ![image](https://user-images.githubusercontent.com/5587071/130664603-e4625320-6d93-48c0-9c96-f37f4f5e998b.png)
 
+![image](https://user-images.githubusercontent.com/5587071/130667161-b3c9538a-4227-49a1-b7ce-d828784c3625.png)
+
 ![image](https://user-images.githubusercontent.com/5587071/130664934-53a7342d-8870-4173-a5ec-a3c68e7f89dd.png)
 
 ## Installation And Set Up
